@@ -5,6 +5,8 @@
 #define SCL_PIN D1
 #define EEPROM_SELECTED_ACCOUNT_ADDR 0
 #define I2C_DISPLAY_ADDRESS 1
+#define INTERVAL 30000
+#define INTERVAL_ERR 5000
 
 #include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
@@ -88,8 +90,6 @@ void setup() {
 
 StaticJsonBuffer<4096> jsonBuffer;
 
-const unsigned short INTERVAL = 30000;
-
 unsigned int pow10int(byte p) {
   unsigned int n = 1;
   for (byte i = 0; i < p; i ++) {
@@ -103,13 +103,13 @@ void loop() {
     WiFiClientSecure client;
     if (!client.connect(apiHost, apiHttpsPort)) {
       transmit(connErr);
-      delay(INTERVAL);
+      delay(INTERVAL_ERR);
       return;
     }
 
     if (!client.verify(apiHttpsCertificateFingerprint, apiHost)) {
       transmit(httpsErr);
-      delay(INTERVAL);
+      delay(INTERVAL_ERR);
       return;
     }
 
@@ -133,6 +133,8 @@ void loop() {
     displayBalance();
   } else {
     transmit(inetErr);
+    delay(INTERVAL_ERR);
+    return;
   }
 
   delay(INTERVAL);
