@@ -80,6 +80,7 @@ void setup() {
   transmit(bunq);
 
   WiFi.begin(wifiSsid, wifiPassword);
+  WiFi.setAutoConnect(true);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(50);
