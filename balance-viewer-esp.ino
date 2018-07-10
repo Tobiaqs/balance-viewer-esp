@@ -48,22 +48,22 @@ const byte bunq[] = { 0, B01111100, B00111110, B00110111, B01100111, 0 };
 String payload;
 bool interruptsAttached = false;
 
-unsigned long prevBtn1Press = 0;
+unsigned long prevSwitch = 0;
 
 void btn1Pressed() {
-  if (millis() - prevBtn1Press < 500) {
+
+}
+
+void btn2Pressed() {
+  if (millis() - prevSwitch < 500) {
     return;
   }
-  prevBtn1Press = millis();
+  prevSwitch = millis();
   
   byte old = EEPROM.read(EEPROM_SELECTED_ACCOUNT_ADDR);
   EEPROM.write(EEPROM_SELECTED_ACCOUNT_ADDR, old + 1);
   EEPROM.commit();
-  displayBalance();
-}
-
-void btn2Pressed() {
-  
+  displayBalance();  
 }
 
 void setup() {
@@ -81,6 +81,7 @@ void setup() {
 
   WiFi.begin(wifiSsid, wifiPassword);
   WiFi.setAutoConnect(true);
+  WiFi.setAutoReconnect(true);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(50);
