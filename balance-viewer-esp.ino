@@ -78,8 +78,6 @@ void setup() {
   delay(750); //give mini time to boot up
   
   transmit(bunq);
-  
-  Serial.begin(9600);
 
   WiFi.begin(wifiSsid, wifiPassword);
 
@@ -145,7 +143,6 @@ void displayBalance() {
     attachInterrupt(digitalPinToInterrupt(BTN1_PIN), btn1Pressed, FALLING);
     attachInterrupt(digitalPinToInterrupt(BTN2_PIN), btn2Pressed, FALLING);
     interruptsAttached = true;
-    Serial.println("Interrupts attached!");
   }
   
   JsonObject& root = jsonBuffer.parseObject(payload);
@@ -174,12 +171,6 @@ void displayBalance() {
   if (noAccountsFound) {
     transmit(noAcct);
     return;
-  }
-
-  if (selectedAccount == 255) {
-    accountNotFound = false;
-    EEPROM.write(EEPROM_SELECTED_ACCOUNT_ADDR, i - 1);
-    EEPROM.commit();
   }
 
   if (accountNotFound) {
